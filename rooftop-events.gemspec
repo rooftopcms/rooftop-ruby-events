@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Ed Jones", "Paul Hendrick"]
   spec.email         = ["hosting@error.agency"]
 
-  spec.summary       = %q{A library to interact with Rooftop CMS events}
-  spec.description   = %q{A library to interact with Rooftop CMS events}
+  spec.summary       = %q{A library to interact with Rooftop CMS event posts}
+  spec.description   = %q{A library to interact with Rooftop CMS event posts}
   spec.homepage      = "https://github.com/rooftopcms/rooftop-ruby-events"
   spec.license       = "MIT"
 
