@@ -1,4 +1,5 @@
 require 'rooftop'
+require 'require_all'
 require_rel '.'
 
 module Rooftop
