@@ -13,6 +13,11 @@ module Rooftop
             record.custom_attributes = record.send(meta_method)[:custom_attributes]
           end
         })
+
+        # before saving, we need to move stuff from custom_attributes back to meta_[event|event_instance]
+        base.send(:before_save, ->(record) {
+          record.restore_custom_attributes!
+        })
       end
 
 
