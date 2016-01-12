@@ -8,11 +8,16 @@ module Rooftop
       belongs_to :price_list, class: "Rooftop::Events::PriceList"
 
       def price_band
-        resource_links.find_by(link_type: "price_band").first.resolve
+        # TODO - we should be able to call resolve() on these links
+
+        # PriceBand.find(id)
       end
 
       def ticket_type
-        resource_links.find_by(link_type: "ticket_type").first.resolve
+        # TODO - we should be able to call resolve() on these links
+        href = resource_links.find_by(link_type: "ticket_type").first.href
+        id = href.split("=").last
+        # TicketType.find(id)
       end
 
     end
