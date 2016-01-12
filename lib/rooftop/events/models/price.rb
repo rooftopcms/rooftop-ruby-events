@@ -2,22 +2,22 @@ module Rooftop
   module Events
     class Price
       include Rooftop::Post
+      include Rooftop::Events::MetaAttributes
       self.api_namespace = "rooftop-events"
       self.api_version = 2
       self.api_endpoint = "price_lists/:price_list_id/prices"
-      belongs_to :price_list, class: "Rooftop::Events::PriceList"
+      resource_path "prices/:id?_embed"
+      scope :with_embedded_resources, -> { all(_embed: true)}
+
 
       def price_band
         # TODO - we should be able to call resolve() on these links
-
-        # PriceBand.find(id)
+        PriceBand.find(_embedded[:price_band].first[:id])
       end
 
       def ticket_type
         # TODO - we should be able to call resolve() on these links
-        href = resource_links.find_by(link_type: "ticket_type").first.href
-        id = href.split("=").last
-        # TicketType.find(id)
+        TicketType.find(_embedded[:ticket_type].first[:id])
       end
 
     end
