@@ -6,9 +6,6 @@ module Rooftop
       self.api_namespace = "rooftop-events"
       self.api_version = 2
       self.api_endpoint = "price_lists/:price_list_id/prices"
-      resource_path "prices/:id?_embed"
-      scope :with_embedded_resources, -> { all(_embed: true)}
-
 
       def price_band
         # TODO - we should be able to call resolve() on these links
