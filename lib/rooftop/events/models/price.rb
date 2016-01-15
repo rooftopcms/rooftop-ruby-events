@@ -5,14 +5,9 @@ module Rooftop
       include Rooftop::Events::MetaAttributes
       self.api_namespace = "rooftop-events"
       self.api_version = 2
-      # self.api_endpoint = "price_lists/:price_list_id/prices"
+      self.api_endpoint = "price_lists/:price_list_id/prices"
+      belongs_to :price_list, class: "Rooftop::Events::PriceList"
 
-      def initialize(args)
-        super
-        if _embedded
-          @_price_list_id = _embedded[:price_list].first[:id]
-        end
-      end
 
       def price_band
         # TODO - we should be able to call resolve() on these links
@@ -23,11 +18,6 @@ module Rooftop
         # TODO - we should be able to call resolve() on these links
         TicketType.find(_embedded[:ticket_type].first[:id])
       end
-
-      # def _price_list_id
-      #   _embedded[:price_list].first[:id]
-      # end
-
 
     end
   end
