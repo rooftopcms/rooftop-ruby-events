@@ -13,7 +13,7 @@ module Rooftop
           PriceList.find(_embedded[:price_list].first[:id])
         end
       end
-
+      
     end
   end
 end
