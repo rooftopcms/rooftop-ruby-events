@@ -7,11 +7,13 @@ module Rooftop
       self.api_version = 2
       has_many :prices, class: "Rooftop::Events::Price"
 
-
-
-      # def prices
-      #   Price.all(_price_list_id: self.id).with_embedded_resources
-      # end
+      def prices
+        if self.respond_to?(:_embedded) && self._embedded.try(:has_key?, :prices)
+          self._embedded[:prices].first.collect{|p| Price.new(p.merge({_price_list_id: self.id}))}
+        else
+          Price.all(_price_list_id: self.id).with_embedded_resources
+        end
+      end
 
     end
   end
