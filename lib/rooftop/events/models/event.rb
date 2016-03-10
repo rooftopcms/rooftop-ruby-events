@@ -15,6 +15,14 @@ module Rooftop
         opts = default_opts.merge(opts)
         Event.get("#{self.class.collection_path}/#{self.id}/related_events?#{opts.to_query}")
       end
+
+      def embedded_instances
+        if respond_to?(:_embedded) && self._embedded.has_key?(:instances)
+          _embedded[:instances].first.collect {|e| Rooftop::Events::Instance.new(e.merge(event_id: self.id, modified: DateTime.now, date: DateTime.now)).tap {|i| i.run_callbacks(:find)}}
+        else
+          raise NoMethodError, "You need to find this event with (include_embedded_resources: true, no_filter: [:include_embedded_resources])"
+        end
+      end
     end
   end
 end
