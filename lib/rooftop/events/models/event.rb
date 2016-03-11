@@ -23,6 +23,19 @@ module Rooftop
           raise NoMethodError, "You need to find this event with (include_embedded_resources: true, no_filter: [:include_embedded_resources])"
         end
       end
+
+      def is_bookable?
+        if self.respond_to?(:event_instance_availabilities) && event_instance_availabilities.flatten.any?
+          sorted = Hash[event_instance_availabilities.first.sort_by{|instance_id, availability| DateTime.parse(availability[:starts_at])}]
+
+          DateTime.parse(sorted[sorted.keys.last][:starts_at]).future? && sorted.collect{|i,a| a[:seats_available].to_i}.sum > 0
+        end
+      end
+
+      def is_sold_out?
+        !is_bookable?
+      end
+
     end
   end
 end
