@@ -18,7 +18,9 @@ module Rooftop
 
       def embedded_instances
         if respond_to?(:_embedded) && self._embedded.has_key?(:instances)
-          _embedded[:instances].first.collect {|e| Rooftop::Events::Instance.new(e.merge(event_id: self.id, modified: DateTime.now, date: DateTime.now)).tap {|i| i.run_callbacks(:find)}}
+          _embedded[:instances].first.collect do |e|
+            Rooftop::Events::Instance.new(e.merge(event_id: self.id, modified: DateTime.now, date: DateTime.now, event_slug: self.slug)).tap {|i| i.run_callbacks(:find)}
+          end
         else
           raise NoMethodError, "You need to find this event with (include_embedded_resources: true, no_filter: [:include_embedded_resources])"
         end
