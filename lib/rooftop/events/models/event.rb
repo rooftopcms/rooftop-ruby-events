@@ -12,7 +12,7 @@ module Rooftop
           per_page: 10
         }
         opts[:per_page] = opts[:count]
-        opts = default_opts.merge(opts)
+        opts = default_opts.merge(opts).compact
         Event.get("#{self.class.collection_path}/#{self.id}/related_events?#{opts.to_query}")
       end
 
