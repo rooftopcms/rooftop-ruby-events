@@ -9,7 +9,8 @@ module Rooftop
 
       def related_events(opts = {})
         default_opts = {
-          per_page: 10
+          per_page: 10,
+          count: 10
         }
         opts[:per_page] = opts[:count]
         opts = default_opts.merge(opts).compact
