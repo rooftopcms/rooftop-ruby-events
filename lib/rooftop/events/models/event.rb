@@ -20,7 +20,7 @@ module Rooftop
       def embedded_instances
         if respond_to?(:_embedded) && self._embedded.is_a?(Hash) && self._embedded.has_key?(:instances)
           _embedded[:instances].first.collect do |e|
-            Rooftop::Events::Instance.new(e.merge(event_id: self.id, modified: DateTime.now, date: DateTime.now, event_slug: self.slug, event_title: self.title, event_meta_attributes: self.meta_attributes)).tap {|i| i.run_callbacks(:find)}
+            Rooftop::Events::Instance.new(e.merge(event_id: self.id, modified: DateTime.now, date: DateTime.now, event_slug: self.slug, event_title: self.title,  event_meta_attributes: self.meta_attributes)).tap {|i| i.run_callbacks(:find)}
           end
         else
           []
@@ -29,8 +29,8 @@ module Rooftop
 
       def is_bookable?
         if self.respond_to?(:event_instance_availabilities) && event_instance_availabilities.flatten.any?
-          sorted = Hash[event_instance_availabilities.first.sort_by{|instance_id, availability| DateTime.parse(availability[:starts_at])}]
-
+          sorted = Hash[event_instance_availabilities.first.sort_by{|instance_id, availability| availability[:starts_at].present? ? DateTime.parse(availability[:starts_at]) : DateTime.now}]
+          sorted.reject! {|id, availability| availability[:starts_at].nil?}
           DateTime.parse(sorted[sorted.keys.last][:starts_at]).future? && sorted.collect{|i,a| a[:seats_available].to_i}.sum > 0
         end
       end
